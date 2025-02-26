@@ -1,82 +1,50 @@
 import {useState} from 'react';
-import {Pressable, StyleSheet, Text, Touchable, View} from 'react-native';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
 import Create from './Create';
 import Allitem from './Allitem';
 
-const data = [
-  {
-    id: 1,
-    name: 'Rice',
-    quantity: 10,
-    unit: 'kg',
-  },
-  {
-    id: 2,
-    name: 'Mustard oil',
-    quantity: 5,
-    unit: 'ltr',
-  },
-  {
-    id: 3,
-    name: 'Suger',
-    quantity: 15,
-    unit: 'kg',
-  },
-  {
-    id: 4,
-    name: 'Soap',
-    quantity: 20,
-    unit: 'pkts',
-  },
-];
-
 const Home = () => {
-  const [items, setItems] = useState(0);
+  const [data, setData] = useState([
 
+  ]);
+
+  const [screen, setScreen] = useState(0); 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Dashboard</Text>
-
+      {/* Navigation Buttons */}
       <View style={styles.child}>
         <Pressable
-          style={[
-            styles.button,
-            items === 0 ? {backgroundColor: 'black'} : null,
-          ]}
-          onPress={() => setItems(0)}>
-          <Text style={[items === 0 ? {color: 'white'} : null]}>All Items</Text>
+          style={[styles.button, screen === 0 && styles.activeButton]}
+          onPress={() => setScreen(0)}>
+          <Text style={screen === 0 && styles.activeText}>All Items</Text>
         </Pressable>
 
         <Pressable
-          style={[
-            styles.button,
-            items === 1 ? {backgroundColor: 'black'} : null,
-          ]}
-          onPress={() => setItems(1)}>
-          <Text style={[items === 1 ? {color: 'white'} : null]}>
-            Low Stocks
-          </Text>
+          style={[styles.button, screen === 1 && styles.activeButton]}
+          onPress={() => setScreen(1)}>
+          <Text style={screen === 1 && styles.activeText}>Low Stocks</Text>
         </Pressable>
 
         <Pressable
-          style={[
-            styles.button,
-            items === 2 ? {backgroundColor: 'black'} : null,
-          ]}
-          onPress={() => setItems(2)}>
-          <Text style={[items === 2 ? {color: 'white'} : null]}>Create</Text>
+          style={[styles.button, screen === 2 && styles.activeButton]}
+          onPress={() => setScreen(2)}>
+          <Text style={screen === 2 && styles.activeText}>Create</Text>
         </Pressable>
       </View>
-
-      {items === 0 && <Allitem data={data} />}
-      {items === 1 && <Allitem data={data.filter(item => item.quantity < 8)} />}
-      {items === 2 && <Create />}
+      {/* Dynamic Content */}
+      {screen === 0 && <Allitem data={data} />}
+      {screen === 1 && (
+        <Allitem data={data.filter(item => item.quantity < 8)} />
+      )}
+      {screen === 2 && <Create setData={setData} />} 
     </View>
   );
 };
 
 export default Home;
 
+// Styles
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
@@ -86,7 +54,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 30,
-    fontWeight: 700,
+    fontWeight: 'bold',
     paddingBottom: 10,
   },
   child: {
@@ -98,5 +66,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     borderRadius: 10,
+  },
+  activeButton: {
+    backgroundColor: 'black',
+  },
+  activeText: {
+    color: 'white',
   },
 });
